@@ -99,7 +99,7 @@ export default function DictionaryPage() {
   }, [searchTerm, fetchDefinition]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-brown-50 to-brown-100 p-4 sm:p-6 md:p-8 flex flex-col items-center">
+    <div className="min-h-screen bg-gradient-to-b from-brown-50 to-brown-100 p-4 sm:p-6 md:p-8 flex flex-col items-center bg-white">
       <Card className="w-full max-w-4xl bg-white shadow-xl rounded-xl overflow-hidden">
         <CardContent className="p-4 sm:p-6 md:p-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-brown-800 text-center">
