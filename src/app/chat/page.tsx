@@ -97,7 +97,7 @@ export default function BookBuddy() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4 bg-white text-black font-mono">
+    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4 bg-white text-black">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold tracking-tight">Дана - книжный друг</h1>
         <button
