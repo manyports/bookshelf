@@ -51,7 +51,7 @@ export default function BookRecommender() {
 
   return (
     <div className="min-h-screen bg-white text-black p-8 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-8">AI Книжный Рекомендатель</h1>
+      <h1 className="text-4xl font-bold mb-8">Дана - книжный рекомендатель</h1>
       
       <div className="w-full max-w-lg mb-12">
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -104,7 +104,7 @@ export default function BookRecommender() {
           </CardContent>
           <CardFooter className="bg-gray-100 p-4">
             <p className="text-sm text-gray-600">
-              Эта книга рекомендована ИИ на основе вашего запроса: "{prompt}"
+              Эта книга рекомендована Даной на основе вашего запроса: "{prompt}"
             </p>
           </CardFooter>
         </Card>

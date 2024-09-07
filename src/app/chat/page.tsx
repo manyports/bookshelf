@@ -13,7 +13,7 @@ export default function BookBuddy() {
     {
       role: "assistant",
       content:
-        "Привет, книголюб! Я твой AI Книжный Друг, работающий на базе Langchain и Google Gemini. Я готов анализировать литературу с точностью хирурга и остроумием стендап-комика. В какое литературное приключение мы отправимся?",
+        "Привет, книголюб! Я Дана - твой книжный друг. Я готова анализировать литературу с точностью хирурга и остроумием стендап-комика. В какое литературное приключение мы отправимся?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -83,7 +83,7 @@ export default function BookBuddy() {
       {
         role: "assistant",
         content:
-          "Готов к новому литературному путешествию! Какую книгу или автора мы будем исследовать на этот раз?",
+          "Готова к новому литературному путешествию! Какую книгу или автора мы будем исследовать на этот раз?",
       },
     ]);
     setInput("");
@@ -99,7 +99,7 @@ export default function BookBuddy() {
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto p-4 bg-white text-black font-mono">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">ИИ книжный друг</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Дана - книжный друг</h1>
         <button
           onClick={handleNewChat}
           className="flex items-center px-3 py-2 bg-black text-white rounded transition-colors"
