@@ -161,12 +161,12 @@ export default function BookForum() {
                     onChange={(e) => setName(e.target.value)}
                   />
                   <Textarea
-                    placeholder="Ваш отзыв"
+                    placeholder="Ваше сообщение"
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
                   />
                   <Button type="submit" className="w-full">
-                    Отправить отзыв
+                    Отправить сообщение
                   </Button>
                 </form>
               </div>
