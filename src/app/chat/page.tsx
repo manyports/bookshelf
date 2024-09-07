@@ -133,7 +133,7 @@ export default function BookBuddy() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Type your literary musings..."
+          placeholder="Напишите мне о чём угодно - отвечу сразу 🖤"
           className="flex-grow bg-transparent text-sm focus:outline-none"
           disabled={isLoading}
         />
