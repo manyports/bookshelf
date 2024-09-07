@@ -166,7 +166,7 @@ export default function BookForum() {
                     onChange={(e) => setReview(e.target.value)}
                   />
                   <Button type="submit" className="w-full">
-                    Отправить сообщение
+                    Отправить!
                   </Button>
                 </form>
               </div>
