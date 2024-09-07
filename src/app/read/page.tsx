@@ -86,6 +86,61 @@ export default function BookArchive() {
       pdfUrl:
         "https://utfs.io/f/29f2998f-bbd1-4774-b7dc-8671c8d3901a-o8xn4n.pdf",
     },
+    {
+      id: 4,
+      title: "Весёлая наука",
+      author: "Ф. Ницце",
+      category: "Философия",
+      year: 1882,
+      pages: 165,
+      pdfUrl:
+        "https://utfs.io/f/85685958-510b-4c85-a591-69d41d2e0486-n19hzw.pdf",
+    },
+    {
+        id: 5,
+        title: "Ертегілер жинағы",
+        author: "Жорабек Алимжан",
+        category: "Современная классика",
+        year: 2022,
+        pages: 33,
+        pdfUrl: "https://utfs.io/f/c3337674-6fd0-495e-817e-ccb1b2355efc-v75dd4.pdf"
+    },
+    {
+        id: 6,
+        title: "Қаһар романы",
+        author: "Ілияс Есенберлин",
+        category: "Классическая литература",
+        year: 2003,
+        pages: 288,
+        pdfUrl: "https://utfs.io/f/c239c6e1-81b6-49f8-90e1-c08d09e33b6d-3jfrh1.pdf"
+    },
+    {
+        id: 7,
+        title: "Қаздар қайтып барады",
+        author: "Қабдеш Жұмаділов",
+        category: "Классическая литература",
+        year: 1968,
+        pages: 8,
+        pdfUrl: "https://utfs.io/f/483e756a-859b-4e15-a754-801fd5a73c2a-88bkr8.pdf"
+    },
+    {
+        id: 8,
+        title: "Хан кене",
+        author: "Ілияс Есенберлин",
+        category: "Классическая литература",
+        year: 1969,
+        pages: 8,
+        pdfUrl: "https://utfs.io/f/a0273f36-6cd9-414b-a7a0-cf69973542ab-jwap9d.pdf"
+    },
+    {
+        id: 9,
+        title: "Қыз Жібек",
+        author: "Ғабит Мүсірепов",
+        category: "Классическая литература",
+        year: 1971,
+        pages: 8,
+        pdfUrl: "https://utfs.io/f/4e58b1c9-d8a1-4cc2-a31e-052d490c7394-9rxf29.pdf"
+    },
   ];
 
   const filteredBooks = books.filter(
@@ -125,7 +180,9 @@ export default function BookArchive() {
 
     return (
       <>
-        <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">{book.title}</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
+          {book.title}
+        </h2>
         <h3 className="text-lg md:text-xl mb-4 md:mb-6">{book.author}</h3>
         <p className="mb-4">
           Страница {currentPage} из {numPages}
@@ -133,8 +190,12 @@ export default function BookArchive() {
         {isLoading && (
           <div className="flex flex-col items-center justify-center h-64 animate-pulse">
             <div className="w-16 h-16 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mb-4"></div>
-            <p className="text-lg font-medium text-gray-700">Загрузка книги...</p>
-            <p className="text-sm text-gray-500 mt-2">Приготовьтесь к увлекательному чтению!</p>
+            <p className="text-lg font-medium text-gray-700">
+              Загрузка книги...
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Приготовьтесь к увлекательному чтению!
+            </p>
           </div>
         )}
         <Document
@@ -160,7 +221,9 @@ export default function BookArchive() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2 md:mb-4">Цифровой архив книг</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-2 md:mb-4">
+        Цифровой архив книг
+      </h1>
       <p className="text-lg md:text-xl text-muted-foreground mb-6 md:mb-8">
         Исследуйте нашу обширную коллекцию цифровых книг
       </p>
