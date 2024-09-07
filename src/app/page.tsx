@@ -1,270 +1,475 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  AnimatePresence,
+  motion,
+  useAnimation,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
+  Archive,
+  ArrowRight,
+  Book,
   Bookmark,
   ChevronLeft,
   ChevronRight,
-  Heart,
-  Menu,
-  X,
+  Clock,
+  MessageSquare,
+  PenTool,
+  Plus,
+  Star,
+  Users,
 } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import ReactTypingEffect from "react-typing-effect";
 
-type Book = {
-  id: number;
-  title: string;
-  author: string;
-  quote: string;
-  genre: string;
+const AnimatedCursor = () => {
+  const cursorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const moveCursor = (e: MouseEvent) => {
+      if (cursorRef.current) {
+        cursorRef.current.style.top = `${e.clientY}px`;
+        cursorRef.current.style.left = `${e.clientX}px`;
+      }
+    };
+    window.addEventListener("mousemove", moveCursor);
+    return () => window.removeEventListener("mousemove", moveCursor);
+  }, []);
+
+  return (
+    <div
+      ref={cursorRef}
+      className="md:fixed w-6 h-6 rounded-full border-2 border-black pointer-events-none z-50 transition-transform duration-100 ease-out"
+      style={{ transform: "translate(-50%, -50%)" }}
+    />
+  );
 };
 
-const books: Book[] = [
+const features = [
   {
-    id: 1,
-    title: "1984",
-    author: "George Orwell",
-    quote: "War is peace. Freedom is slavery. Ignorance is strength.",
-    genre: "Dystopian",
+    title: "Wordle для книг",
+    description: "Угадывайте названия книг в нашей ежедневной игре",
+    icon: Book,
+    content: (
+      <div className="grid grid-cols-5 gap-2">
+        {["С", "Т", "Р", "А", "Х"].map((letter, index) => (
+          <motion.div
+            key={index}
+            className={`w-12 h-12 border-2 flex items-center justify-center text-2xl font-bold ${
+              letter ? "border-black" : "border-gray-300"
+            }`}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            {letter}
+          </motion.div>
+        ))}
+      </div>
+    ),
   },
   {
-    id: 2,
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    quote:
-      "You never really understand a person until you consider things from his point of view.",
-    genre: "Classic",
+    title: "Архив книг",
+    description: "Доступ к обширной библиотеке произведений",
+    icon: Archive,
+    content: (
+      <motion.div
+        className="w-64 h-80 bg-gray-100 rounded shadow-lg"
+        initial={{ rotateY: -90 }}
+        animate={{ rotateY: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="h-full flex items-center justify-center">
+          <Book size={48} />
+        </div>
+      </motion.div>
+    ),
   },
   {
-    id: 3,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    quote:
-      "So we beat on, boats against the current, borne back ceaselessly into the past.",
-    genre: "Literary Fiction",
+    title: "Интерактивное чтение",
+    description: "Погрузитесь в мир книг с нашими интерактивными функциями",
+    icon: Book,
+    content: (
+      <div className="relative w-64 h-80 bg-gray-100 rounded shadow-lg overflow-hidden">
+        <motion.div
+          className="absolute inset-0 bg-white p-4"
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="text-lg font-bold mb-2">Глава 1: Начало</h3>
+          <p className="text-sm">
+            Это был темный и бурный вечер. Ветер завывал...
+          </p>
+        </motion.div>
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white p-2"
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-white border-white"
+          >
+            Перевернуть страницу
+          </Button>
+        </motion.div>
+      </div>
+    ),
   },
   {
-    id: 4,
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    quote:
-      "For what do we live, but to make sport for our neighbors, and laugh at them in our turn?",
-    genre: "Romance",
+    title: "AI Чат",
+    description: "Обсуждайте книги с нашим AI-ассистентом",
+    icon: MessageSquare,
+    content: (
+      <div className="space-y-4 max-w-md">
+        <motion.div
+          className="bg-gray-100 p-3 rounded-lg"
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+        >
+          Что вы думаете о главном герое "1984"?
+        </motion.div>
+        <motion.div
+          className="bg-black text-white p-3 rounded-lg ml-auto"
+          initial={{ x: 20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <ReactTypingEffect
+            text={[
+              "Уинстон Смит - сложный персонаж, символизирующий борьбу за индивидуальность в тоталитарном обществе.",
+            ]}
+            speed={50}
+            eraseDelay={2000}
+          />
+        </motion.div>
+      </div>
+    ),
+  },
+  {
+    title: "ИИ оценит книгу для вас",
+    description: "Спросите у ИИ книгу, он вам предложит, да оценит",
+    icon: Star,
+    content: (
+      <div className="space-y-4 max-w-md">
+        <h3 className="text-lg font-bold">"Ромео и Джульетта"</h3>
+        <div className="flex space-x-2">
+          {[1, 2, 3, 4, 5].map((rating) => (
+            <motion.button
+              key={rating}
+              className="text-2xl"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.8 }}
+            >
+              ⭐
+            </motion.button>
+          ))}
+        </div>
+        <Button>Дана, оцени еще эту книгу!</Button>
+      </div>
+    ),
+  },
+  {
+    title: "Форум читателей",
+    description: "Обсуждайте книги с единомышленниками",
+    icon: Users,
+    content: (
+      <div className="space-y-4 max-w-md">
+        <motion.div
+          className="bg-gray-100 p-3 rounded-lg"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        >
+          <strong>Алимжан:</strong> Как вам новый роман Исигуро?
+        </motion.div>
+        <motion.div
+          className="bg-gray-100 p-3 rounded-lg"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <strong>Ерасыл:</strong> Потрясающе! Особенно понравилась атмосфера.
+        </motion.div>
+      </div>
+    ),
+  },
+  {
+    title: "Геймификация чтения",
+    description: "Отслеживайте свой прогресс и ставьте цели",
+    icon: Clock,
+    content: (
+      <div className="w-64 h-80 bg-gray-100 rounded shadow-lg p-4">
+        <h3 className="text-lg font-bold mb-4">Ваш прогресс</h3>
+        <div className="space-y-4">
+          <div>
+            <motion.div
+              className="h-4 bg-gray-200 rounded-full overflow-hidden"
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1 }}
+            >
+              <motion.div
+                className="h-full bg-red-500"
+                initial={{ width: 0 }}
+                animate={{ width: "60%" }}
+                transition={{ duration: 1, delay: 0.5 }}
+              />
+            </motion.div>
+            <p className="text-sm mt-1">6 помидоров</p>
+          </div>
+          <div>
+            <p className="text-sm mb-1">Часов потрачено:</p>
+            <motion.div
+              className="h-4 bg-gray-200 rounded-full overflow-hidden"
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1 }}
+            >
+              <motion.div
+                className="h-full bg-blue-500"
+                initial={{ width: 0 }}
+                animate={{ width: "66%" }}
+                transition={{ duration: 1, delay: 0.5 }}
+              />
+            </motion.div>
+            <p className="text-sm mt-1">6ч</p>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: "Интерактивные заметки",
+    description: "Создавайте и организуйте заметки прямо во время чтения",
+    icon: PenTool,
+    content: (
+      <div className="w-64 h-80 bg-gray-100 rounded shadow-lg p-4 overflow-hidden">
+        <h3 className="text-lg font-bold mb-2">Ваши заметки</h3>
+        <div className="space-y-2">
+          {[
+            "Интересная мысль на стр. 42",
+            "Ключевой момент в главе 3",
+            "Вопрос к автору",
+          ].map((note, index) => (
+            <motion.div
+              key={index}
+              className="bg-white p-2 rounded shadow cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {note}
+            </motion.div>
+          ))}
+        </div>
+        <motion.div
+          className="absolute bottom-4 right-4"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <Button size="icon">
+            <Plus className="h-4 w-4" />
+          </Button>
+        </motion.div>
+      </div>
+    ),
   },
 ];
 
-const quoteOfTheDay = {
-  text: "The only way to do great work is to love what you do.",
-  author: "Steve Jobs",
-};
+const FeatureShowcase = () => {
+  const [currentFeature, setCurrentFeature] = useState(0);
 
-const wordOfTheDay = {
-  word: "Serendipity",
-  definition:
-    "The occurrence and development of events by chance in a happy or beneficial way.",
-};
+  const nextFeature = () =>
+    setCurrentFeature((prev) => (prev + 1) % features.length);
+  const prevFeature = () =>
+    setCurrentFeature((prev) => (prev - 1 + features.length) % features.length);
 
-export default function BookMatch() {
-  const [currentBookIndex, setCurrentBookIndex] = useState(0);
-  const [direction, setDirection] = useState<"left" | "right" | "">("");
-  const [likedBooks, setLikedBooks] = useState<Book[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [currentPage, setCurrentPage] = useState<"main" | "library">("main");
-
-  const currentBook = books[currentBookIndex];
-
-  const handleSwipe = (swipeDirection: "left" | "right") => {
-    if (isAnimating) return;
-
-    setIsAnimating(true);
-    setDirection(swipeDirection);
-
-    setTimeout(() => {
-      setCurrentBookIndex((prevIndex) => (prevIndex + 1) % books.length);
-      setDirection("");
-      setIsAnimating(false);
-    }, 300);
-  };
-
-  const handleLike = () => {
-    if (!likedBooks.some((book) => book.id === currentBook.id)) {
-      setLikedBooks([...likedBooks, currentBook]);
-    } else {
-      setLikedBooks(likedBooks.filter((book) => book.id !== currentBook.id));
-    }
-  };
-
-  const isLiked = likedBooks.some((book) => book.id === currentBook.id);
+  useEffect(() => {
+    const timer = setInterval(nextFeature, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row items-start justify-center min-h-screen bg-background p-4 sm:p-6 md:p-8 lg:p-12 bg-white text-black">
-      <div className="w-full lg:w-1/3 max-w-md mb-6 lg:mb-0 lg:mr-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold text-foreground">BookMatch</h1>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full lg:hidden"
-              >
-                <Menu className="h-4 w-4" />
-                <span className="sr-only">Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="bg-white text-black">
-              <SheetHeader>
-                <SheetTitle className="text-2xl font-bold">Menu</SheetTitle>
-              </SheetHeader>
-              <div className="mt-4 space-y-2">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-xl font-semibold"
-                  onClick={() => setCurrentPage("main")}
-                >
-                  Dashboard
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-xl font-semibold"
-                  onClick={() => setCurrentPage("library")}
-                >
-                  My Library ({likedBooks.length})
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+    <div className="relative">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h3 className="text-2xl font-bold">
+            {features[currentFeature].title}
+          </h3>
+          <p className="text-gray-600">
+            {features[currentFeature].description}
+          </p>
         </div>
-        <Card className="mb-4">
-          <CardContent className="p-4">
-            <h2 className="font-semibold mb-2">Quote of the Day</h2>
-            <p className="italic mb-1">&ldquo;{quoteOfTheDay.text}&rdquo;</p>
-            <p className="text-sm text-muted-foreground">
-              - {quoteOfTheDay.author}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="mb-4">
-          <CardContent className="p-4">
-            <h2 className="font-semibold mb-2">Word of the Day</h2>
-            <p className="font-medium mb-1">{wordOfTheDay.word}</p>
-            <p className="text-sm">- {wordOfTheDay.definition}</p>
-          </CardContent>
-        </Card>
-        <div className="hidden lg:flex flex-col space-y-2 bg-white text-black">
-          <Button
-            variant="ghost"
-            className="w-full justify-start"
-            onClick={() => setCurrentPage("main")}
-          >
-            Main Page
+        <div className="flex space-x-2">
+          <Button variant="outline" size="icon" onClick={prevFeature}>
+            <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start"
-            onClick={() => setCurrentPage("library")}
-          >
-            My Library ({likedBooks.length})
+          <Button variant="outline" size="icon" onClick={nextFeature}>
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentFeature}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-center items-center h-96"
+        >
+          {features[currentFeature].content}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
 
-      <div className="w-full lg:w-2/3 max-w-2xl">
-        {currentPage === "main" ? (
-          <div className="relative w-full aspect-[3/4] lg:aspect-[4/3]">
-            <Card
-              className={`absolute inset-0 flex flex-col justify-between transition-all duration-300 ease-in-out ${
-                direction === "left"
-                  ? "-translate-x-full rotate-12 opacity-0"
-                  : direction === "right"
-                  ? "translate-x-full -rotate-12 opacity-0"
-                  : "translate-x-0 rotate-0 opacity-100"
-              }`}
+const ParallaxSection = ({ children }: { children: React.ReactNode }) => {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <motion.div style={{ y }} className="relative z-10">
+      {children}
+    </motion.div>
+  );
+};
+
+export default function EnhancedInteractiveLanding() {
+  return (
+    <div className="min-h-screen bg-white text-black">
+      <AnimatedCursor />
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <CardContent className="flex flex-col justify-between h-full p-6">
-                <div>
-                  <Badge variant="outline" className="mb-2">
-                    {currentBook.genre}
-                  </Badge>
-                  <h2 className="text-2xl font-bold mb-1">
-                    {currentBook.title}
-                  </h2>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {currentBook.author}
-                  </p>
-                  <Separator className="my-4" />
-                  <p className="italic text-lg">
-                    &ldquo;{currentBook.quote}&rdquo;
-                  </p>
+              <ReactTypingEffect
+                text={[
+                  "Переосмыслите чтение",
+                  "Откройте новые миры",
+                  "Погрузитесь в истории",
+                  "Расширьте свой кругозор",
+                ]}
+                speed={50}
+                eraseSpeed={50}
+                typingDelay={1000}
+                eraseDelay={2000}
+                className="text-3xl md:text-6xl font-bold mb-6"
+              />
+            </motion.div>
+            <motion.p
+              className="text-xl mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Откройте для себя новый мир литературы с помощью AI и
+              инновационных инструментов
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <Button
+                asChild
+                size="lg"
+                className="bg-black text-white hover:bg-gray-800"
+              >
+                <Link href="/dash">
+                  Начать бесплатно <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Исследуйте наши возможности
+          </h2>
+          <FeatureShowcase />
+        </div>
+      </section>
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Как это работает
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Создайте аккаунт",
+                description:
+                  "Зарегистрируйтесь и настройте свой профиль читателя",
+              },
+              {
+                title: "Выберите книгу",
+                description:
+                  "Используйте AI-рекомендации или просматривайте библиотеку",
+              },
+              {
+                title: "Погрузитесь в чтение",
+                description:
+                  "Читайте, делайте заметки и обсуждайте прочитанное",
+              },
+            ].map((step, index) => (
+              <motion.div
+                key={index}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">
+                  {index + 1}
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-between p-6">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleSwipe("left")}
-                  className="rounded-full transition-transform duration-200 hover:scale-110"
-                  disabled={isAnimating}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  <span className="sr-only">Skip</span>
-                </Button>
-                <Button
-                  variant={isLiked ? "default" : "outline"}
-                  size="icon"
-                  onClick={handleLike}
-                  className="rounded-full transition-transform duration-200 hover:scale-110"
-                >
-                  <Heart
-                    className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`}
-                  />
-                  <span className="sr-only">Like</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleSwipe("right")}
-                  className="rounded-full transition-transform duration-200 hover:scale-110"
-                  disabled={isAnimating}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                  <span className="sr-only">Next</span>
-                </Button>
-              </CardFooter>
-            </Card>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
+              </motion.div>
+            ))}
           </div>
-        ) : (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">My Library</h2>
-            {likedBooks.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {likedBooks.map((book) => (
-                  <Card key={book.id}>
-                    <CardContent className="p-4">
-                      <h3 className="font-bold">{book.title}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {book.author}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <p>Your library is empty. Like some books to add them here!</p>
-            )}
-          </div>
-        )}
-      </div>
+        </div>
+      </section>
+      <section className="py-20 bg-black text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Готовы начать?</h2>
+          <p className="text-xl mb-8">
+            Присоединяйтесь к сообществу книголюбов и откройте для себя новый
+            мир чтения
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="bg-white text-black hover:bg-gray-200"
+          >
+            <Link href="/dash">
+              Попробовать сейчас <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }
