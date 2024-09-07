@@ -16,57 +16,31 @@ type Book = {
   rating: number
 }
 
-const bookDatabase: Book[] = [
-  {
-    title: "Преступление и наказание",
-    author: "Фёдор Достоевский",
-    description: "Роман о моральных и психологических терзаниях молодого студента Родиона Раскольникова, решившегося на убийство. Глубокое исследование человеческой природы, вины и искупления.",
-    genre: "Классическая литература",
-    rating: 4.8
-  },
-  {
-    title: "Мастер и Маргарита",
-    author: "Михаил Булгаков",
-    description: "Сатирический роман о визите дьявола в атеистическую Москву. Сочетание фантастических и реалистических элементов, критика советского общества.",
-    genre: "Магический реализм",
-    rating: 4.9
-  },
-  {
-    title: "Война и мир",
-    author: "Лев Толстой",
-    description: "Эпический роман, охватывающий события Отечественной войны 1812 года. Исследование жизни нескольких аристократических семей на фоне исторических событий.",
-    genre: "Исторический роман",
-    rating: 4.7
-  }
-]
-
 export default function BookRecommender() {
   const [prompt, setPrompt] = useState('')
   const [recommendedBook, setRecommendedBook] = useState<Book | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const simulateAIRecommendation = (prompt: string): Promise<Book> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Простая логика выбора книги на основе ключевых слов в промпте
-        if (prompt.toLowerCase().includes('преступление') || prompt.toLowerCase().includes('психология')) {
-          resolve(bookDatabase[0])
-        } else if (prompt.toLowerCase().includes('фантастика') || prompt.toLowerCase().includes('сатира')) {
-          resolve(bookDatabase[1])
-        } else if (prompt.toLowerCase().includes('история') || prompt.toLowerCase().includes('война')) {
-          resolve(bookDatabase[2])
-        } else {
-          // Если нет совпадений, возвращаем случайную книгу
-          resolve(bookDatabase[Math.floor(Math.random() * bookDatabase.length)])
-        }
-      }, 1500) // Имитация задержки API
-    })
+  const getRecommendationFromServer = async (prompt: string): Promise<Book> => {
+    const response = await fetch('/api/recommend-book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get recommendation');
+    }
+
+    return response.json();
   }
 
   const handleSearch = async () => {
     setIsLoading(true)
     try {
-      const book = await simulateAIRecommendation(prompt)
+      const book = await getRecommendationFromServer(prompt)
       setRecommendedBook(book)
     } catch (error) {
       console.error('Ошибка при получении рекомендации:', error)
@@ -85,7 +59,7 @@ export default function BookRecommender() {
             type="text" 
             placeholder="Введите ваши интересы или желаемую тему книги..." 
             value={prompt}
-            onChange={(e : any) => setPrompt(e.target.value)}
+            onChange={(e) => setPrompt(e.target.value)}
             className="flex-grow border-black focus:ring-black focus:border-black"
           />
           <Button 
@@ -130,7 +104,7 @@ export default function BookRecommender() {
           </CardContent>
           <CardFooter className="bg-gray-100 p-4">
             <p className="text-sm text-gray-600">
-              Эта книга рекомендована на основе вашего запроса: "{prompt}"
+              Эта книга рекомендована ИИ на основе вашего запроса: "{prompt}"
             </p>
           </CardFooter>
         </Card>
