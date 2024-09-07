@@ -52,6 +52,7 @@ export default function BookArchive() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
   const [numPages, setNumPages] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const books: BookType[] = [
@@ -96,6 +97,7 @@ export default function BookArchive() {
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
+    setIsLoading(false);
   }
 
   const changeScale = (newScale: string) => {
@@ -128,9 +130,17 @@ export default function BookArchive() {
         <p className="mb-4">
           Страница {currentPage} из {numPages}
         </p>
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center h-64 animate-pulse">
+            <div className="w-16 h-16 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mb-4"></div>
+            <p className="text-lg font-medium text-gray-700">Загрузка книги...</p>
+            <p className="text-sm text-gray-500 mt-2">Приготовьтесь к увлекательному чтению!</p>
+          </div>
+        )}
         <Document
           file={book.pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
+          loading={<></>}
           options={{
             cMapUrl: "cmaps/",
             cMapPacked: true,
@@ -196,6 +206,7 @@ export default function BookArchive() {
                   onClick={() => {
                     setSelectedBook(book);
                     setCurrentPage(1);
+                    setIsLoading(true);
                   }}
                 >
                   <div className="flex flex-col items-start">
