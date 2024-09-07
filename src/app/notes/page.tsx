@@ -27,8 +27,6 @@ import {
   Book,
   Edit,
   Hash,
-  Image as LucideImage,
-  Link as LucideLink,
   PenTool,
   Plus,
   Save,
@@ -72,7 +70,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       </Button>
       <Button
         variant="outline"
-        size="icon"
+        size="default"
         onClick={() => {
           const url = window.prompt("URL");
           if (url) {
@@ -81,11 +79,11 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         }}
         className={editor.isActive("link") ? "is-active" : ""}
       >
-        <LucideLink className="h-4 w-4" />
+        <p>ссылка</p>
       </Button>
       <Button
         variant="outline"
-        size="icon"
+        size="default"
         onClick={() => {
           const url = window.prompt("Image URL");
           if (url) {
@@ -93,7 +91,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           }
         }}
       >
-        <LucideImage className="h-4 w-4" />
+        <p>картина</p>
       </Button>
       <Button
         variant="outline"
@@ -102,6 +100,15 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
       >
         <Hash className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => {
+          toast.info("Drawing feature coming soon!");
+        }}
+      >
+        <PenTool className="h-4 w-4" />
       </Button>
     </div>
   );
@@ -148,18 +155,11 @@ export default function BookNotes() {
     },
   });
 
-  const activeNoteData =
-    activeSpace && activeNote
-      ? noteSpaces
-          .find((space) => space.id === activeSpace)
-          ?.notes.find((note) => note.id === activeNote)
-      : null;
-
   useEffect(() => {
     if (editor && activeNoteData) {
       editor.commands.setContent(activeNoteData.content);
     }
-  }, [activeNote, activeNoteData, editor]);
+  }, [activeNote, editor]);
 
   const createNoteSpace = () => {
     const newSpace: NoteSpace = {
@@ -308,6 +308,13 @@ export default function BookNotes() {
         )
     : [];
 
+  const activeNoteData =
+    activeSpace && activeNote
+      ? noteSpaces
+          .find((space) => space.id === activeSpace)
+          ?.notes.find((note) => note.id === activeNote)
+      : null;
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Заметки по книгам</h1>
@@ -322,9 +329,9 @@ export default function BookNotes() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-screen">
-              {" "}
-              {/* Устанавливаем высоту для ScrollArea */}
+            <ScrollArea
+              className={`${isMobile ? "h-[200px]" : "h-[calc(100vh-300px)]"}`}
+            >
               <Tabs
                 value={activeSpace || undefined}
                 onValueChange={setActiveSpace}
@@ -459,7 +466,7 @@ export default function BookNotes() {
                     <MenuBar editor={editor} />
                     <EditorContent
                       editor={editor}
-                      className="prose max-w-none mb-4 p-4 border rounded-md w-full min-h-[300px] cursor-text"
+                      className="prose max-w-none mb-4 p-4 border rounded-md min-h-[300px]"
                     />
                     <div className="flex justify-between items-center">
                       <div className="flex flex-wrap gap-1">
@@ -485,7 +492,7 @@ export default function BookNotes() {
                         <DialogTrigger asChild>
                           <Button variant="outline">Добавить тег</Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-white">
+                        <DialogContent>
                           <DialogHeader>
                             <DialogTitle>Добавить новый тег</DialogTitle>
                           </DialogHeader>
