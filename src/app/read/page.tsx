@@ -123,8 +123,8 @@ export default function BookArchive() {
 
     return (
       <>
-        <h2 className="text-2xl font-bold mb-4">{book.title}</h2>
-        <h3 className="text-xl mb-6">{book.author}</h3>
+        <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">{book.title}</h2>
+        <h3 className="text-lg md:text-xl mb-4 md:mb-6">{book.author}</h3>
         <p className="mb-4">
           Страница {currentPage} из {numPages}
         </p>
@@ -150,12 +150,12 @@ export default function BookArchive() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-4">Цифровой архив книг</h1>
-      <p className="text-xl text-muted-foreground mb-8">
+      <h1 className="text-3xl md:text-4xl font-bold mb-2 md:mb-4">Цифровой архив книг</h1>
+      <p className="text-lg md:text-xl text-muted-foreground mb-6 md:mb-8">
         Исследуйте нашу обширную коллекцию цифровых книг
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      <div className="flex flex-col md:flex-row gap-4 mb-6 md:mb-8">
         <div className="relative flex-grow">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -167,7 +167,7 @@ export default function BookArchive() {
           />
         </div>
         <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Категория" />
           </SelectTrigger>
           <SelectContent>
@@ -185,29 +185,33 @@ export default function BookArchive() {
         </Select>
       </div>
 
-      <ul className="space-y-4">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredBooks.map((book) => (
           <li key={book.id}>
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  variant="ghost"
-                  className="w-full text-left justify-start"
+                  variant="outline"
+                  className="w-full text-left justify-start h-auto py-4"
                   onClick={() => {
                     setSelectedBook(book);
                     setCurrentPage(1);
                   }}
                 >
-                  <Book className="mr-2 h-4 w-4" />
-                  <span className="font-medium">{book.title}</span>
-                  <span className="ml-2 text-muted-foreground">
-                    - {book.author}, {book.year}
-                  </span>
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center mb-2">
+                      <Book className="mr-2 h-4 w-4" />
+                      <span className="font-medium">{book.title}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {book.author}, {book.year}
+                    </span>
+                  </div>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-4xl h-[90vh] p-0 overflow-hidden flex flex-col">
+              <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden flex flex-col">
                 <div className="flex flex-col h-full">
-                  <div className="bg-muted p-4 flex justify-between items-center">
+                  <div className="bg-muted p-4 flex flex-col md:flex-row justify-between items-center gap-4">
                     <DialogHeader>
                       <DialogTitle className="text-lg font-semibold">
                         {selectedBook?.title}
@@ -252,7 +256,7 @@ export default function BookArchive() {
                   <div className="flex-grow overflow-y-auto">
                     <div
                       ref={containerRef}
-                      className="p-8"
+                      className="p-4 md:p-8"
                       style={{
                         backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
                         color: isDarkMode ? "#e0e0e0" : "#333333",
@@ -269,9 +273,9 @@ export default function BookArchive() {
                       disabled={currentPage === 1}
                     >
                       <ChevronLeft className="h-4 w-4 mr-2" />
-                      Предыдущая
+                      <span className="hidden md:inline">Предыдущая</span>
                     </Button>
-                    <span>
+                    <span className="text-sm md:text-base">
                       Страница {currentPage} из {numPages}
                     </span>
                     <Button
@@ -280,7 +284,7 @@ export default function BookArchive() {
                       onClick={goToNextPage}
                       disabled={currentPage === numPages}
                     >
-                      Следующая
+                      <span className="hidden md:inline">Следующая</span>
                       <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
                   </div>
