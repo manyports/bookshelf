@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     - Genre
     - Rating (on a scale of 1 to 5)
 
-    Return your recommendation as a JSON object with the following structure:
+    Return your recommendation in the language the prompt is given in as a JSON object with the following structure:
     {
       "title": "Book Title",
       "author": "Author Name",
@@ -43,6 +43,8 @@ export async function POST(request: Request) {
       "genre": "Book Genre",
       "rating": 4.5
     }
+    
+    Include humor in description, be it whatever. 
     
     Ensure that all fields are filled and the rating is a number between 1 and 5. Do not include any text outside of the JSON object.`);
 
