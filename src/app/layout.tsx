@@ -1,7 +1,7 @@
+import "core-js/full/promise/with-resolvers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import 'core-js/full/promise/with-resolvers';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,8 +15,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bookshelf",
-  description: "Bookshelf is your digital library for all books.",
+  title: "dana.ai - ваш личный библиотекарь",
+  description:
+    "Дана, ваш личный библиотекарь поможет вам со всем, от выбора книги до обсуждения ее :).",
 };
 
 export default function RootLayout({
