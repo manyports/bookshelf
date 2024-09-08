@@ -419,9 +419,8 @@ export default function EnhancedInteractiveLanding() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "Создайте аккаунт",
-                description:
-                  "Зарегистрируйтесь и настройте свой профиль читателя",
+                title: "Зайдите на профиль",
+                description: "Зайдите на профиль и ознакомьтесь с ним",
               },
               {
                 title: "Выберите книгу",
