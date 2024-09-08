@@ -1,3 +1,5 @@
+import { Footer } from "@/components/ui/footer";
+import Header from "@/components/ui/header";
 import "core-js/full/promise/with-resolvers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -30,7 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>{children}</main>
+        <main>
+          <Header />
+          {children}
+          <Footer />
+        </main>
       </body>
     </html>
   );

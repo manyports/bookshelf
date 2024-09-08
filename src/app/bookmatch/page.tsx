@@ -111,7 +111,7 @@ export default function Component() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
-      <header className="p-4 fixed w-full z-10 bg-white/80 backdrop-blur-sm">
+      <header className="p-4 w-full z-10 bg-white/80 backdrop-blur-sm">
         <nav className="flex justify-between items-center max-w-4xl mx-auto">
           <Button
             variant="ghost"

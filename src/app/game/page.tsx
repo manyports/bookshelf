@@ -93,7 +93,7 @@ export default function ReadingTimer() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto p-4 max-w-md min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Счетчик чтения</h1>
 
       <div className="mb-6">
