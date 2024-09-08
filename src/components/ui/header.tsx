@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Book,
-  Home,
-  Languages,
-  MessageCircle,
-  Pencil,
-  Timer,
-  Users,
+    Book,
+    Home,
+    Languages,
+    MessageCircle,
+    Pencil,
+    Timer,
+    Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -70,7 +70,7 @@ export default function Header() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent side="right" className="bg-white">
             <nav className="flex flex-col space-y-4">
               <Link href="/" className="flex items-center space-x-2">
                 <span className="font-bold">Dana</span>
